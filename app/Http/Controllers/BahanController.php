@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bahan;
 use App\Http\Requests\StoreBahanRequest;
 use App\Http\Requests\UpdateBahanRequest;
+use App\Http\Resources\BahanResource;
 
 class BahanController extends Controller
 {
@@ -36,7 +37,23 @@ class BahanController extends Controller
      */
     public function store(StoreBahanRequest $request)
     {
-        //
+        $request->validate([
+            'resep_id' => 'required',
+            'toko_id' => 'required',
+            'nama_bahan' => 'required',
+            'harga' =>'required'
+        ]);
+        $bahan = Bahan::create(
+            [
+                'resep_id' => $request->resep_id,
+                'toko_id' => $request->toko_id,
+                'nama_bahan' => $request->nama_bahan,
+                'harga' => $request->harga,
+            ]
+        );
+        return BahanResource::make($bahan)->additional([
+                'message' => 'success'
+            ]);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Langkah;
 use App\Http\Requests\StoreLangkahRequest;
 use App\Http\Requests\UpdateLangkahRequest;
+use App\Http\Resources\LangkahResource;
 
 class LangkahController extends Controller
 {
@@ -36,7 +37,21 @@ class LangkahController extends Controller
      */
     public function store(StoreLangkahRequest $request)
     {
-        //
+        $request->validate([
+            'resep_id' => 'required',
+            'deskripsi' => 'required',
+            'waktu' => 'required'
+        ]);
+        $bahan = Langkah::create(
+            [
+                'resep_id' => $request->resep_id,
+                'deskripsi' => $request->deskripsi,
+                'waktu' => $request->waktu
+            ]
+        );
+        return LangkahResource::make($bahan)->additional([
+                'message' => 'success'
+            ]);
     }
 
     /**

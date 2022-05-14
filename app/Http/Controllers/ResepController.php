@@ -16,7 +16,14 @@ class ResepController extends Controller
      */
     public function index()
     {
-        return ResepResource::collection(Resep::with(['kategori', 'user'])->get());
+
+        $resep = Resep::latest();
+
+        return ResepResource::collection(
+            $resep->filter(
+                request(['search', 'kategori_id', 'kategori']))
+            ->with(['kategori', 'user'])
+            ->get());
     }
 
     /**

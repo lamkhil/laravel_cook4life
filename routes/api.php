@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\ResepController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,7 @@ use App\Http\Controllers\UserController;
 //API with authorization bearer token
 Route::middleware('auth:sanctum')->group(function(){
     
+    Route::get('/kategori', [KategoriController::class, 'index']);
     Route::get('/resep', [ResepController::class, 'index']);
     Route::post('/resep', [ResepController::class, 'store']);
     Route::get('/users', [UserController::class, 'index']);

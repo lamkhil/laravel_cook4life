@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kategori;
 use App\Http\Requests\StoreKategoriRequest;
 use App\Http\Requests\UpdateKategoriRequest;
+use App\Http\Resources\KategoriResource;
 
 class KategoriController extends Controller
 {
@@ -15,7 +16,7 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        //
+        return KategoriResource::make(Kategori::all());
     }
 
     /**
@@ -25,7 +26,7 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**

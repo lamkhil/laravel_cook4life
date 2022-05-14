@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Toko;
 use App\Http\Requests\StoreTokoRequest;
 use App\Http\Requests\UpdateTokoRequest;
+use App\Http\Resources\TokoResource;
 
 class TokoController extends Controller
 {
@@ -36,7 +37,27 @@ class TokoController extends Controller
      */
     public function store(StoreTokoRequest $request)
     {
-        //
+        $user = $request->user();
+        $request->validate([
+            'nama_toko' => 'required',
+            'alamat' => 'required',
+            'latitude' => 'required',
+            'longitude' =>'required',
+            'no_telp' =>'required'
+        ]);
+        $toko = Toko::create(
+            [
+                'nama_toko' => $request->nama_toko,
+                'alamat' => $request->alamat,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'no_telp' => $request->no_telp,
+                'user_id' => $user->id
+            ]
+        );
+        return TokoResource::make($toko)->additional([
+                'message' => 'success'
+            ]);
     }
 
     /**
