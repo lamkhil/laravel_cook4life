@@ -28,15 +28,34 @@ class Resep extends Model
         return $this->hasMany(Langkah::class);
     }
 
+    public function like(){
+        return $this->hasMany(Like::class);
+    }
+
+    public function like_me(){
+        return $this->hasMany(Like::class)->whereUserId($this->user_id);
+    }
+
+    public function favorit_me(){
+        return $this->hasMany(Favorit::class)->whereUserId($this->user_id);
+    }
+
+    public function favorit(){
+        return $this->hasMany(Favorit::class);
+    }
+
     public function scopeFilter($query, array $filters){
         
         $query->when($filters['search']??false, function($query, $search){
             return $query->where('nama_resep', 'like', '%'.$search.'%')
-                        ->orWhere('deskripsi', 'like', '%'.$search.'%');
+                        ->orWhere('deskripsi', 'like', '%'.$search.'%')
+                        ->orWhereHas('kategori', function($query) use ($search){
+                            $query->where('nama_kategori', 'like', '%'.$search.'%');
+                        });
         });
 
         $query->when($filters['kategori_id']??false, function($query, $kategori_id){
-            return $query->where('kategori_id', '=', '%'.$kategori_id.'%');
+            return $query->where('kategori_id', $kategori_id);
         });
 
         $query->when($filters['kategori']??false, function($query, $kategori){

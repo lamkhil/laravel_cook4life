@@ -9,4 +9,6 @@ class Bahan extends Model
 {
     public $table = "bahan";
     use HasFactory;
+    
+    protected $guarded =[];
 }

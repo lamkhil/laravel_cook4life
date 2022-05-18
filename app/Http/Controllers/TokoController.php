@@ -61,7 +61,7 @@ class TokoController extends Controller
                 'user_id' => $user->id
             ]
         );
-        return TokoResource::make($toko->with(['user']))->additional([
+        return TokoResource::make($toko)->additional([
                 'message' => 'success'
             ]);
     }

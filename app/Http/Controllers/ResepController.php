@@ -6,6 +6,8 @@ use App\Models\Resep;
 use App\Http\Requests\StoreResepRequest;
 use App\Http\Requests\UpdateResepRequest;
 use App\Http\Resources\ResepResource;
+use App\Models\Bahan;
+use App\Models\Langkah;
 
 class ResepController extends Controller
 {
@@ -22,8 +24,22 @@ class ResepController extends Controller
         return ResepResource::collection(
             $resep->filter(
                 request(['search', 'kategori_id', 'kategori']))
-            ->with(['kategori', 'user'])
+                ->with(['kategori', 'user', 'bahan', 'langkah'])
+                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
             ->get());
+    }
+
+    public function rekomendasi()
+    {
+
+        $resep = Resep::latest();
+
+        return ResepResource::collection(
+            $resep->filter(
+                request(['search', 'kategori_id', 'kategori']))
+            ->with(['kategori', 'user', 'bahan', 'langkah'])
+            ->withCount(['like', 'favorit', 'like_me','favorit_me'])
+            ->paginate(5))->sortBy('like');
     }
 
     /**
@@ -49,9 +65,11 @@ class ResepController extends Controller
             'nama_resep' => 'required',
             'kategori_id' => 'required',
             'deskripsi' => 'required',
-            'foto' =>'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+            'foto' =>'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'bahan' => 'required',
+            'langkah' => 'required'
         ]);
-        $path = str_replace('public','storage', $request->file('foto')->store('public/reseps'));
+        $path = str_replace('public','', $request->file('foto')->store('public/reseps'));
         $resep = Resep::create(
             [
                 'nama_resep' => $request->nama_resep,
@@ -61,6 +79,29 @@ class ResepController extends Controller
                 'user_id' => $user->id
             ]
         );
+        $arrayBahan = $request->bahan;
+        $arrayLangkah = $request->langkah;
+        foreach ($arrayBahan as $bahan) {
+            Bahan::create(
+                [
+                'resep_id'=>$resep->id,
+                'toko_id'=>$bahan['toko_id'],
+                'nama_bahan'=>$bahan['nama_bahan'],
+                'harga'=>$bahan['harga']
+                ]
+            );
+        }
+
+        foreach ($arrayLangkah as $langkah) {
+            Langkah::create(
+                [
+                'resep_id'=>$resep->id,
+                'deskripsi'=>$langkah['deskripsi'],
+                'waktu'=>$langkah['waktu'],
+                ]
+            );
+        }
+
         return ResepResource::make($resep)->additional([
                 'message' => 'success'
             ]);

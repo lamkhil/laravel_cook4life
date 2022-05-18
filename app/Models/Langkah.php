@@ -9,4 +9,5 @@ class Langkah extends Model
 {
     public $table = "langkah";
     use HasFactory;
+    protected $guarded =[];
 }

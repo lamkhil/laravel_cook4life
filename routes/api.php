@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/kategori', [KategoriController::class, 'index']);
     Route::get('/resep', [ResepController::class, 'index']);
     Route::post('/resep', [ResepController::class, 'store']);
+    Route::get('/resep/rekomendasi', [ResepController::class, 'rekomendasi']);
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/user', function (Request $request) {
         return $request->user();
