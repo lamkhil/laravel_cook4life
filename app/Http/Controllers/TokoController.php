@@ -16,7 +16,13 @@ class TokoController extends Controller
      */
     public function index()
     {
-        //
+        $toko = Toko::latest();
+
+        return TokoResource::collection(
+            $toko->filter(
+                request(['search']))
+            ->with(['user'])
+            ->get());
     }
 
     /**
