@@ -6,6 +6,7 @@ use App\Models\Toko;
 use App\Http\Requests\StoreTokoRequest;
 use App\Http\Requests\UpdateTokoRequest;
 use App\Http\Resources\TokoResource;
+use Illuminate\Http\Request;
 
 class TokoController extends Controller
 {
@@ -14,7 +15,7 @@ class TokoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $toko = Toko::latest();
 
@@ -22,6 +23,7 @@ class TokoController extends Controller
             $toko->filter(
                 request(['search']))
             ->with(['user'])
+            ->where('user_id', $request->user()->id)
             ->get());
     }
 
