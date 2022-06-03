@@ -33,7 +33,7 @@ class ResepController extends Controller
             ->get());
     }
 
-    public function rekomendasi()
+    public function rekom()
     {
 
         $resep = Resep::latest();
@@ -43,7 +43,7 @@ class ResepController extends Controller
                 request(['search', 'kategori_id', 'kategori']))
                 ->with(['kategori', 'user', 'bahan', 'langkah'])
                 ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->get());
+            ->get())->paginate(5)->sortBy('like');
     }
 
     /**
