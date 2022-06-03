@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Komentar;
 use App\Http\Requests\StoreKomentarRequest;
 use App\Http\Requests\UpdateKomentarRequest;
+use App\Http\Resources\KomentarResource;
 
 class KomentarController extends Controller
 {
@@ -13,9 +14,10 @@ class KomentarController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        return KomentarResource::collection(
+            Komentar::latest()->where('resep_id', '=', $id)->get());
     }
 
     /**
@@ -36,7 +38,16 @@ class KomentarController extends Controller
      */
     public function store(StoreKomentarRequest $request)
     {
-        //
+        $user = $request->user();
+        Komentar::create([
+           'resep_id'=> $request->resep_id,
+           'user_id'=>$user->id,
+           'komentar'=>$request->komentar
+        ]);
+
+
+        return KomentarResource::collection(
+            Komentar::latest()->where(['resep_id','=',$request->resep_id])->get());
     }
 
     /**
@@ -81,6 +92,9 @@ class KomentarController extends Controller
      */
     public function destroy(Komentar $komentar)
     {
-        //
+        $komentar->delete();
+        return KomentarResource::collection(
+            Komentar::latest()->where('resep_id','=',$komentar->resep_id)->get()
+        );
     }
 }

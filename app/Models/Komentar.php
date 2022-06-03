@@ -9,4 +9,6 @@ class Komentar extends Model
 {
     public $table = "komentar";
     use HasFactory;
+
+    protected $guarded=[];
 }

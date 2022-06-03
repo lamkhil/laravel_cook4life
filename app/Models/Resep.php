@@ -32,6 +32,10 @@ class Resep extends Model
         return $this->hasMany(Like::class);
     }
 
+    public function komentar(){
+        return $this->hasMany(Komentar::class);
+    }
+
     public function like_me(){
         return $this->hasMany(Like::class)->whereUserId($this->user_id);
     }
