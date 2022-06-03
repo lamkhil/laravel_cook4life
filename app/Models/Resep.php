@@ -21,7 +21,7 @@ class Resep extends Model
     }
 
     public function bahan(){
-        return $this->hasMany(Bahan::class);
+        return $this->hasMany(Bahan::class)->with('toko');
     }
 
     public function langkah(){
