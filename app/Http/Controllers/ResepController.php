@@ -43,7 +43,7 @@ class ResepController extends Controller
                 request(['search', 'kategori_id', 'kategori']))
             ->with(['kategori', 'user', 'bahan', 'langkah'])
             ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->paginate(5))->sortBy('like');
+            ->paginate(5));
     }
 
     /**
