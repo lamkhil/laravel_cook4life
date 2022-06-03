@@ -39,7 +39,7 @@ class ResepController extends Controller
 
         return ResepResource::collection(
             $resep->filter(
-                request(['search', 'kategori_id', 'kategori']))
+                request(['search', 'kategori_id', 'kategori', 'rating', 'komentar']))
             ->with(['kategori', 'user', 'bahan', 'langkah'])
             ->withCount(['like', 'favorit', 'like_me','favorit_me'])
             ->paginate(5))->sortBy('like');
