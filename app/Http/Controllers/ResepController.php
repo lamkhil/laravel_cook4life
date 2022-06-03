@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Resep;
 use App\Http\Requests\StoreResepRequest;
-use Illuminate\Http\Request;
 use App\Http\Requests\UpdateResepRequest;
 use App\Http\Resources\ResepResource;
 use App\Models\Bahan;
-use App\Models\Favorit;
 use App\Models\Langkah;
+use Illuminate\Http\Request;
+use App\Models\Favorit;
 use App\Models\Like;
 use App\Models\Rating;
 
@@ -28,6 +28,7 @@ class ResepController extends Controller
         return ResepResource::collection(
             $resep->filter(
                 request(['search', 'kategori_id', 'kategori']))
+                ->with(['kategori', 'user', 'bahan', 'langkah'])
                 ->withCount(['like', 'favorit', 'like_me','favorit_me'])
             ->get());
     }
@@ -38,8 +39,9 @@ class ResepController extends Controller
         $resep = Resep::latest();
 
         return ResepResource::collection(
-            $resep
-            ->with(['kategori', 'user', 'bahan', 'langkah','rating', 'komentar'])
+            $resep->filter(
+                request(['search', 'kategori_id', 'kategori']))
+            ->with(['kategori', 'user', 'bahan', 'langkah'])
             ->withCount(['like', 'favorit', 'like_me','favorit_me'])
             ->paginate(5))->sortBy('like');
     }
@@ -109,12 +111,6 @@ class ResepController extends Controller
             ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Resep  $resep
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $resep = Resep::findOrFail($id);
