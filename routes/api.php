@@ -21,7 +21,7 @@ use App\Models\Komentar;
 
 //API with authorization bearer token
 Route::middleware('auth:sanctum')->group(function(){
-    
+
     Route::get('/toko', [TokoController::class, 'index']);
     Route::post('/toko', [TokoController::class, 'store']);
     
@@ -32,9 +32,10 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/kategori', [KategoriController::class, 'index']);
 
     Route::get('/resep', [ResepController::class, 'index']);
-    Route::post('/like/{id}', [ResepController::class, 'like']);
-    Route::post('/favorite/{id}', [ResepController::class, 'favorite']);
+    Route::post('/like', [ResepController::class, 'like']);
+    Route::post('/favorite', [ResepController::class, 'favorite']);
     Route::post('/resep', [ResepController::class, 'store']);
+    Route::post('/rating', [ResepController::class, 'rating']);
     Route::get('/resep/{id}', [ResepController::class, 'show']);
     Route::get('/resep/rekomendasi', [ResepController::class, 'rekomendasi']);
 

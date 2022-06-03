@@ -44,6 +44,10 @@ class Resep extends Model
         return $this->hasMany(Favorit::class)->whereUserId($this->user_id);
     }
 
+    public function rating(){
+        return $this->hasMany(Rating::class)->whereUserId($this->user_id);
+    }
+
     public function favorit(){
         return $this->hasMany(Favorit::class);
     }

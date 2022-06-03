@@ -11,6 +11,7 @@ use App\Models\Bahan;
 use App\Models\Favorit;
 use App\Models\Langkah;
 use App\Models\Like;
+use App\Models\Rating;
 
 class ResepController extends Controller
 {
@@ -119,7 +120,7 @@ class ResepController extends Controller
     {
         $resep = Resep::findOrFail($id);
         return ResepResource::make(
-            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar'])
+            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
                 ->withCount(['like', 'favorit', 'like_me','favorit_me'])
             ->get());
     }
@@ -143,7 +144,7 @@ class ResepController extends Controller
          }
         $resep = Resep::findOrFail($request->resep_id);
         return ResepResource::make(
-            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar'])
+            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
                 ->withCount(['like', 'favorit', 'like_me','favorit_me'])
             ->get());
     }
@@ -167,7 +168,34 @@ class ResepController extends Controller
          }
         $resep = Resep::findOrFail($request->resep_id);
         return ResepResource::make(
-            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar'])
+            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
+            ->get());
+    }
+
+    public function rating(Request $request)
+    {
+        $user = $request->user();
+        if (Rating::where([
+            'user_id', '=',$user->id,
+            'resep_id', '=',$request->resep_id
+        ])->exists()) {
+            Rating::where([
+                'user_id', '=',$user->id,
+                'resep_id', '=',$request->resep_id
+            ])->update([
+                'rating'=>$request->rating
+            ]);
+         }else{
+            Rating::create([
+                'user_id'=>$user->id,
+                'resep_id'=>$request->resep_id,
+                'rating'=>$request->rating
+             ]);
+         }
+        $resep = Resep::findOrFail($request->resep_id);
+        return ResepResource::make(
+            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
                 ->withCount(['like', 'favorit', 'like_me','favorit_me'])
             ->get());
     }

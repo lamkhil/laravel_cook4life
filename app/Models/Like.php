@@ -9,4 +9,6 @@ class Like extends Model
 {
     public $table = "like";
     use HasFactory;
+
+    protected $guarded=[];
 }

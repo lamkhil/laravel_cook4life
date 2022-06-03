@@ -9,4 +9,6 @@ class Favorit extends Model
 {
     public $table = "favorit";
     use HasFactory;
+
+    protected $guarded=[];
 }
