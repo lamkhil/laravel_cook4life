@@ -8,10 +8,6 @@ use App\Http\Requests\UpdateResepRequest;
 use App\Http\Resources\ResepResource;
 use App\Models\Bahan;
 use App\Models\Langkah;
-use Illuminate\Http\Request;
-use App\Models\Favorit;
-use App\Models\Like;
-use App\Models\Rating;
 
 class ResepController extends Controller
 {
@@ -33,7 +29,7 @@ class ResepController extends Controller
             ->get());
     }
 
-    public function rekom()
+    public function rekomendasi()
     {
 
         $resep = Resep::latest();
@@ -41,9 +37,9 @@ class ResepController extends Controller
         return ResepResource::collection(
             $resep->filter(
                 request(['search', 'kategori_id', 'kategori']))
-                ->with(['kategori', 'user', 'bahan', 'langkah'])
-                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->get())->paginate(5)->sortBy('like');
+            ->with(['kategori', 'user', 'bahan', 'langkah'])
+            ->withCount(['like', 'favorit', 'like_me','favorit_me'])
+            ->paginate(5))->sortBy('like');
     }
 
     /**
@@ -111,88 +107,15 @@ class ResepController extends Controller
             ]);
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Resep  $resep
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Resep $resep)
     {
-        $resep = Resep::findOrFail($id);
-        return ResepResource::make(
-            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->get());
-    }
-
-    public function like(Request $request)
-    {
-        $user = $request->user();
-        if (Like::where([
-            'user_id'=>$user->id,
-            'resep_id'=>$request->resep_id
-        ])->exists()) {
-            Like::where([
-                'user_id', '=',$user->id,
-                'resep_id', '=',$request->resep_id
-            ])->delete();
-         }else{
-             Like::create([
-                'user_id' =>$user->id,
-                'resep_id' =>$request->resep_id
-             ]);
-         }
-        $resep = Resep::findOrFail($request->resep_id);
-        return ResepResource::make(
-            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->get());
-    }
-
-    public function favorite(Request $request)
-    {
-        $user = $request->user();
-        if (Favorit::where([
-            'user_id', '=',$user->id,
-            'resep_id', '=',$request->resep_id
-        ])->exists()) {
-            Favorit::where([
-                'user_id', '=',$user->id,
-                'resep_id', '=',$request->resep_id
-            ])->delete();
-         }else{
-            Favorit::create([
-                'user_id'=>$user->id,
-                'resep_id'=>$request->resep_id
-             ]);
-         }
-        $resep = Resep::findOrFail($request->resep_id);
-        return ResepResource::make(
-            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->get());
-    }
-
-    public function rating(Request $request)
-    {
-        $user = $request->user();
-        if (Rating::where([
-            'user_id', '=',$user->id,
-            'resep_id', '=',$request->resep_id
-        ])->exists()) {
-            Rating::where([
-                'user_id', '=',$user->id,
-                'resep_id', '=',$request->resep_id
-            ])->update([
-                'rating'=>$request->rating
-            ]);
-         }else{
-            Rating::create([
-                'user_id'=>$user->id,
-                'resep_id'=>$request->resep_id,
-                'rating'=>$request->rating
-             ]);
-         }
-        $resep = Resep::findOrFail($request->resep_id);
-        return ResepResource::make(
-            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->get());
+        //
     }
 
     /**
