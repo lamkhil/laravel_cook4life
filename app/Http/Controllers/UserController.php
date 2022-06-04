@@ -63,4 +63,17 @@ class UserController extends Controller
             'token' => $token
         ]);
     }
+
+    public function fcm(Request $request)
+    {
+        $user = $request->user();
+        $request->validate([
+            'fcm' => 'required',
+        ]);
+        $user->fcm = $request->fcm;
+        $user->save();
+        return UserResource::make($user)->additional([
+            'status' => "sukses"
+        ]); 
+    }
 }

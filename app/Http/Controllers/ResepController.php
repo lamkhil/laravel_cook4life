@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use App\Models\Favorit;
 use App\Models\Rating;
 use App\Models\Like;
+use App\Models\Notifikasi;
+use App\Models\User;
 
 class ResepController extends Controller
 {
@@ -138,6 +140,13 @@ class ResepController extends Controller
              ]);
          }
         $resep = Resep::findOrFail($request->resep_id);
+        
+        Notifikasi::sendFcm(
+            $resep,
+            $user->name." menyukai resep anda",
+            User::find($resep->user_id)
+        );
+
         return ResepResource::make(
             $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
                 ->withCount(['like', 'favorit', 'like_me','favorit_me'])
@@ -162,6 +171,13 @@ class ResepController extends Controller
              ]);
          }
         $resep = Resep::findOrFail($request->resep_id);
+
+        Notifikasi::sendFcm(
+            $resep,
+            $user->name." memfavoritkan resep anda",
+            User::find($resep->user_id)
+        );
+
         return ResepResource::make(
             $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
                 ->withCount(['like', 'favorit', 'like_me','favorit_me'])
@@ -189,6 +205,13 @@ class ResepController extends Controller
              ]);
          }
         $resep = Resep::findOrFail($request->resep_id);
+
+        Notifikasi::sendFcm(
+            $resep,
+            $user->name." memberi rating ".$request->rating." bintang pada resep anda",
+            User::find($resep->user_id)
+        );
+
         return ResepResource::make(
             $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
                 ->withCount(['like', 'favorit', 'like_me','favorit_me'])
@@ -228,4 +251,6 @@ class ResepController extends Controller
     {
         //
     }
+
+    
 }
