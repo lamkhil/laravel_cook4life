@@ -27,25 +27,18 @@ class ResepController extends Controller
 
         $resep = Resep::latest();
 
+        if (request('rekomendasi')??false) {
+            return ResepResource::collection(
+                $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
+                ->paginate(5))->sortBy('like');
+        }
         return ResepResource::collection(
             $resep->filter(
                 request(['search', 'kategori_id', 'kategori']))
                 ->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
                 ->withCount(['like', 'favorit', 'like_me','favorit_me'])
             ->get());
-    }
-
-    public function rekomendasi()
-    {
-
-        $resep = Resep::latest();
-
-        return ResepResource::collection(
-            $resep->filter(
-                request(['search', 'kategori_id', 'kategori']))
-            ->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-            ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->paginate());
     }
 
     /**
