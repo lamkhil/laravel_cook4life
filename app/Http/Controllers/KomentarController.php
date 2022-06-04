@@ -6,6 +6,9 @@ use App\Models\Komentar;
 use App\Http\Requests\StoreKomentarRequest;
 use App\Http\Requests\UpdateKomentarRequest;
 use App\Http\Resources\KomentarResource;
+use App\Models\Notifikasi;
+use App\Models\Resep;
+use App\Models\User;
 
 class KomentarController extends Controller
 {
@@ -45,6 +48,11 @@ class KomentarController extends Controller
            'komentar'=>$request->komentar
         ]);
 
+        Notifikasi::sendFcm(
+            Resep::find($request->resep_id),
+            $user->name.' mengomentari rating resep anda "'.$request->komentar.'"',
+            User::find(Resep::find($request->resep_id)->user_id)
+        );
 
         return KomentarResource::collection(
             Komentar::latest()->where(['resep_id','=',$request->resep_id])->get());
