@@ -120,14 +120,8 @@ class ResepController extends Controller
     public function like(Request $request)
     {
         $user = $request->user();
-        if (Like::where([
-            'user_id' ,'=', $user->id,
-            'resep_id' ,'=', $request->resep_id
-        ])->exists()) {
-            Like::where([
-                'user_id', '=', $user->id,
-                'resep_id', '=', $request->resep_id
-            ])->delete();
+        if (Like::where('user_id', $user->id)->where('resep_id', $request->resep_id)->exists()) {
+            Like::where('user_id', $user->id)->where('resep_id', $request->resep_id)->delete();
         } else {
             Like::create([
                 'user_id' => $user->id,
@@ -151,14 +145,8 @@ class ResepController extends Controller
     public function favorite(Request $request)
     {
         $user = $request->user();
-        if (Favorit::where([
-            'user_id', '=', $user->id,
-            'resep_id', '=', $request->resep_id
-        ])->exists()) {
-            Favorit::where([
-                'user_id', '=', $user->id,
-                'resep_id', '=', $request->resep_id
-            ])->delete();
+        if (Favorit::where('user_id', $user->id)->where('resep_id', $request->resep_id)->exists()) {
+            Favorit::where('user_id', $user->id)->where('resep_id', $request->resep_id)->delete();
         } else {
             Favorit::create([
                 'user_id' => $user->id,
@@ -182,14 +170,8 @@ class ResepController extends Controller
     public function rating(Request $request)
     {
         $user = $request->user();
-        if (Rating::where([
-            'user_id', '=', $user->id,
-            'resep_id', '=', $request->resep_id
-        ])->exists()) {
-            Rating::where([
-                'user_id', '=', $user->id,
-                'resep_id', '=', $request->resep_id
-            ])->update([
+        if (Rating::where('user_id', $user->id)->where('resep_id', $request->resep_id)->exists()) {
+            Rating::where('user_id', $user->id)->where('resep_id', $request->resep_id)->update([
                 'rating' => $request->rating
             ]);
         } else {
