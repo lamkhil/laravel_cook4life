@@ -121,8 +121,8 @@ class ResepController extends Controller
     {
         $user = $request->user();
         if (Like::where([
-            'user_id' => $user->id,
-            'resep_id' => $request->resep_id
+            'user_id' ,'=', $user->id,
+            'resep_id' ,'=', $request->resep_id
         ])->exists()) {
             Like::where([
                 'user_id', '=', $user->id,
