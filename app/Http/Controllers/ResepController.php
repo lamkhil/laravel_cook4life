@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Resep;
 use App\Http\Requests\StoreResepRequest;
 use App\Http\Requests\UpdateResepRequest;
+use App\Http\Resources\KategoriResource;
 use App\Http\Resources\NotifikasiResource;
 use App\Http\Resources\ResepResource;
 use App\Models\Bahan;
 use App\Models\Langkah;
 use Illuminate\Http\Request;
 use App\Models\Favorit;
+use App\Models\Kategori;
 use App\Models\Komentar;
 use App\Models\Rating;
 use App\Models\Like;
@@ -61,9 +63,9 @@ class ResepController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function kategori()
     {
-        //
+        return KategoriResource::make(Kategori::all());
     }
 
     /**
