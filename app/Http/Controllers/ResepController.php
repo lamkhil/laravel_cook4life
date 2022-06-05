@@ -142,11 +142,10 @@ class ResepController extends Controller
             User::find($resep->user_id)
         );
 
-        return ResepResource::make(
-            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
-                ->get()
-        );
+        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+            ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
+            ->where('id', '=', $request->resep_id)
+            ->get()[0];
     }
 
     public function favorite(Request $request)
@@ -174,11 +173,10 @@ class ResepController extends Controller
             User::find($resep->user_id)
         );
 
-        return ResepResource::make(
-            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
-                ->get()
-        );
+        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+            ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
+            ->where('id', '=', $request->resep_id)
+            ->get()[0];
     }
 
     public function rating(Request $request)
@@ -209,11 +207,10 @@ class ResepController extends Controller
             User::find($resep->user_id)
         );
 
-        return ResepResource::make(
-            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
-                ->get()
-        );
+        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+            ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
+            ->where('id', '=', $request->resep_id)
+            ->get()[0];
     }
 
     /**
