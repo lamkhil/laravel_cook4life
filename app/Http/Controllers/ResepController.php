@@ -189,7 +189,7 @@ class ResepController extends Controller
                 $user
             );
         }
-        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating', 'allrating'])
         ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
         ->where('id', '=', $request->resep_id)
         ->get()[0];;
@@ -217,7 +217,7 @@ class ResepController extends Controller
         }
 
 
-        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating', 'allrating'])
             ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
             ->where('id', '=', $request->resep_id)
             ->get()[0];
@@ -248,7 +248,7 @@ class ResepController extends Controller
 
         
 
-        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating', 'allrating'])
             ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
             ->where('id', '=', $request->resep_id)
             ->get()[0];
@@ -272,7 +272,7 @@ class ResepController extends Controller
             $user
         );
 
-        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating', 'allrating'])
             ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
             ->where('id', '=', $request->resep_id)
             ->get()[0];
