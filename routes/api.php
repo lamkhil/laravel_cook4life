@@ -36,7 +36,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/favorite', [ResepController::class, 'favorite']);
     Route::post('/resep', [ResepController::class, 'store']);
     Route::post('/rating', [ResepController::class, 'rating']);
-    Route::get('/resep/{id}', [ResepController::class, 'show']);
 
     Route::get('/users', [UserController::class, 'index']);
     Route::post('/fcm', [UserController::class, 'fcm']);
@@ -48,3 +47,5 @@ Route::middleware('auth:sanctum')->group(function(){
 //API without bearer token
 //API Authentication
 Route::post('/google_sign_in', [UserController::class, 'login']);
+
+Route::get('/resep/{id}', [ResepController::class, 'show']);
