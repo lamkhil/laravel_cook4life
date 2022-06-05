@@ -113,7 +113,7 @@ class ResepController extends Controller
             $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
                 ->withCount(['like', 'favorit', 'like_me','favorit_me'])
             ->get());
-            dd($resep);
+            dd($resepResource);
     }
 
     public function like(Request $request)
