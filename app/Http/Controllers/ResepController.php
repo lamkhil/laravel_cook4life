@@ -110,8 +110,7 @@ class ResepController extends Controller
     {
         $resep = Resep::findOrFail($id);
         $resepResource = $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-        ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-    ->get();
+        ->withCount(['like', 'favorit', 'like_me','favorit_me']);
             dd($resepResource);
     }
 
