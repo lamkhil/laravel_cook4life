@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Resep extends Model
 {
@@ -37,11 +38,13 @@ class Resep extends Model
     }
 
     public function like_me(){
-        return $this->hasMany(Like::class)->whereUserId($this->user_id);
+        $user = Auth::user();
+        return $this->hasMany(Like::class)->whereUserId($user->id);
     }
 
     public function favorit_me(){
-        return $this->hasMany(Favorit::class)->whereUserId($this->user_id);
+        $user = Auth::user();
+        return $this->hasMany(Favorit::class)->whereUserId($user->id);
     }
 
     public function rating(){
