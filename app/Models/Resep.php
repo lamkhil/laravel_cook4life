@@ -72,7 +72,7 @@ class Resep extends Model
 
     public function allrating()
     {
-        return $this->hasMany(Rating::class)->pluck('rating');
+        return $this->hasMany(Rating::class);
     }
 
     public function favorit()
