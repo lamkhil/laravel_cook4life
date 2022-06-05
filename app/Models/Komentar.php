@@ -11,4 +11,8 @@ class Komentar extends Model
     use HasFactory;
 
     protected $guarded=[];
+
+    public function toko(){
+        return $this->belongsTo(User::class);
+    }
 }

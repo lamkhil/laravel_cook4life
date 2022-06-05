@@ -40,7 +40,7 @@ class Resep extends Model
 
     public function komentar()
     {
-        return $this->hasMany(Komentar::class);
+        return $this->hasMany(Komentar::class)->with('user');
     }
 
     public function like_me()
