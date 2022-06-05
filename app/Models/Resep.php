@@ -70,6 +70,11 @@ class Resep extends Model
         }
     }
 
+    public function allrating()
+    {
+        return $this->hasMany(Rating::pluck('rating'));
+    }
+
     public function favorit()
     {
         return $this->hasMany(Favorit::class);

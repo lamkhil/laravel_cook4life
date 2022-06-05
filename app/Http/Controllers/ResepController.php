@@ -30,7 +30,7 @@ class ResepController extends Controller
 
         if (request('rekomendasi') ?? false) {
             return ResepResource::collection(
-                $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+                $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating', 'allrating'])
                     ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
                     ->paginate(5)
             )->sortByDesc('like');
@@ -39,7 +39,7 @@ class ResepController extends Controller
             $resep->filter(
                 request(['search', 'kategori_id', 'kategori'])
             )
-                ->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+                ->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating', 'allrating'])
                 ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
                 ->get()
         );
@@ -208,10 +208,10 @@ class ResepController extends Controller
            'user_id'=>$user->id,
            'komentar'=>$request->komentar
         ]);
-
+        $resep = Resep::find($request->resep_id);
         Notifikasi::sendFcm(
-            Resep::find($request->resep_id),
-            $user->name.' mengomentari rating resep anda "'.$request->komentar.'"',
+            $resep,
+            $user->name.' mengomentari resep '.$resep->nama_resep.' anda "'.$request->komentar.'"',
             User::find(Resep::find($request->resep_id)->user_id)
         );
 
