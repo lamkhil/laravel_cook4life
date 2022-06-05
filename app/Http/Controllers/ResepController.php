@@ -27,18 +27,21 @@ class ResepController extends Controller
 
         $resep = Resep::latest();
 
-        if (request('rekomendasi')??false) {
+        if (request('rekomendasi') ?? false) {
             return ResepResource::collection(
                 $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-                ->paginate(5))->sortBy('like');
+                    ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
+                    ->paginate(5)
+            )->sortBy('like');
         }
         return ResepResource::collection(
             $resep->filter(
-                request(['search', 'kategori_id', 'kategori']))
+                request(['search', 'kategori_id', 'kategori'])
+            )
                 ->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->get());
+                ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
+                ->get()
+        );
     }
 
     /**
@@ -64,11 +67,11 @@ class ResepController extends Controller
             'nama_resep' => 'required',
             'kategori_id' => 'required',
             'deskripsi' => 'required',
-            'foto' =>'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'foto' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'bahan' => 'required',
             'langkah' => 'required'
         ]);
-        $path = str_replace('public','', $request->file('foto')->store('public/reseps'));
+        $path = str_replace('public', '', $request->file('foto')->store('public/reseps'));
         $resep = Resep::create(
             [
                 'nama_resep' => $request->nama_resep,
@@ -83,10 +86,10 @@ class ResepController extends Controller
         foreach ($arrayBahan as $bahan) {
             Bahan::create(
                 [
-                'resep_id'=>$resep->id,
-                'toko_id'=>$bahan['toko_id'],
-                'nama_bahan'=>$bahan['nama_bahan'],
-                'harga'=>$bahan['harga']
+                    'resep_id' => $resep->id,
+                    'toko_id' => $bahan['toko_id'],
+                    'nama_bahan' => $bahan['nama_bahan'],
+                    'harga' => $bahan['harga']
                 ]
             );
         }
@@ -94,122 +97,123 @@ class ResepController extends Controller
         foreach ($arrayLangkah as $langkah) {
             Langkah::create(
                 [
-                'resep_id'=>$resep->id,
-                'deskripsi'=>$langkah['deskripsi'],
-                'waktu'=>$langkah['waktu'],
+                    'resep_id' => $resep->id,
+                    'deskripsi' => $langkah['deskripsi'],
+                    'waktu' => $langkah['waktu'],
                 ]
             );
         }
 
         return ResepResource::make($resep)->additional([
-                'message' => 'success'
-            ]);
+            'message' => 'success'
+        ]);
     }
 
     public function show($id)
     {
-        $resep = Resep::findOrFail($id);
-        return ResepResource::make(
-            $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-                ->where('id', '=', $id)
-            ->get());
+        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+            ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
+            ->where('id', '=', $id)
+            ->get();
     }
 
     public function like(Request $request)
     {
         $user = $request->user();
         if (Like::where([
-            'user_id'=>$user->id,
-            'resep_id'=>$request->resep_id
+            'user_id' => $user->id,
+            'resep_id' => $request->resep_id
         ])->exists()) {
             Like::where([
-                'user_id', '=',$user->id,
-                'resep_id', '=',$request->resep_id
+                'user_id', '=', $user->id,
+                'resep_id', '=', $request->resep_id
             ])->delete();
-         }else{
-             Like::create([
-                'user_id' =>$user->id,
-                'resep_id' =>$request->resep_id
-             ]);
-         }
+        } else {
+            Like::create([
+                'user_id' => $user->id,
+                'resep_id' => $request->resep_id
+            ]);
+        }
         $resep = Resep::findOrFail($request->resep_id);
-        
+
         Notifikasi::sendFcm(
             $resep,
-            $user->name." menyukai resep anda",
+            $user->name . " menyukai resep anda",
             User::find($resep->user_id)
         );
 
         return ResepResource::make(
             $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->get());
+                ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
+                ->get()
+        );
     }
 
     public function favorite(Request $request)
     {
         $user = $request->user();
         if (Favorit::where([
-            'user_id', '=',$user->id,
-            'resep_id', '=',$request->resep_id
+            'user_id', '=', $user->id,
+            'resep_id', '=', $request->resep_id
         ])->exists()) {
             Favorit::where([
-                'user_id', '=',$user->id,
-                'resep_id', '=',$request->resep_id
+                'user_id', '=', $user->id,
+                'resep_id', '=', $request->resep_id
             ])->delete();
-         }else{
+        } else {
             Favorit::create([
-                'user_id'=>$user->id,
-                'resep_id'=>$request->resep_id
-             ]);
-         }
+                'user_id' => $user->id,
+                'resep_id' => $request->resep_id
+            ]);
+        }
         $resep = Resep::findOrFail($request->resep_id);
 
         Notifikasi::sendFcm(
             $resep,
-            $user->name." memfavoritkan resep anda",
+            $user->name . " memfavoritkan resep anda",
             User::find($resep->user_id)
         );
 
         return ResepResource::make(
             $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->get());
+                ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
+                ->get()
+        );
     }
 
     public function rating(Request $request)
     {
         $user = $request->user();
         if (Rating::where([
-            'user_id', '=',$user->id,
-            'resep_id', '=',$request->resep_id
+            'user_id', '=', $user->id,
+            'resep_id', '=', $request->resep_id
         ])->exists()) {
             Rating::where([
-                'user_id', '=',$user->id,
-                'resep_id', '=',$request->resep_id
+                'user_id', '=', $user->id,
+                'resep_id', '=', $request->resep_id
             ])->update([
-                'rating'=>$request->rating
+                'rating' => $request->rating
             ]);
-         }else{
+        } else {
             Rating::create([
-                'user_id'=>$user->id,
-                'resep_id'=>$request->resep_id,
-                'rating'=>$request->rating
-             ]);
-         }
+                'user_id' => $user->id,
+                'resep_id' => $request->resep_id,
+                'rating' => $request->rating
+            ]);
+        }
         $resep = Resep::findOrFail($request->resep_id);
 
         Notifikasi::sendFcm(
             $resep,
-            $user->name." memberi rating ".$request->rating." bintang pada resep anda",
+            $user->name . " memberi rating " . $request->rating . " bintang pada resep anda",
             User::find($resep->user_id)
         );
 
         return ResepResource::make(
             $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
-                ->withCount(['like', 'favorit', 'like_me','favorit_me'])
-            ->get());
+                ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
+                ->get()
+        );
     }
 
     /**
@@ -245,6 +249,4 @@ class ResepController extends Controller
     {
         //
     }
-
-    
 }
