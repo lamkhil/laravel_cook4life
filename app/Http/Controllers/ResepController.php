@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Resep;
 use App\Http\Requests\StoreResepRequest;
+use App\Http\Requests\StoreTokoRequest;
 use App\Http\Requests\UpdateResepRequest;
 use App\Http\Resources\KategoriResource;
 use App\Http\Resources\NotifikasiResource;
 use App\Http\Resources\ResepResource;
+use App\Http\Resources\TokoResource;
 use App\Models\Bahan;
 use App\Models\Langkah;
 use Illuminate\Http\Request;
@@ -17,6 +19,7 @@ use App\Models\Komentar;
 use App\Models\Rating;
 use App\Models\Like;
 use App\Models\Notifikasi;
+use App\Models\Toko;
 use App\Models\User;
 
 class ResepController extends Controller
@@ -66,6 +69,43 @@ class ResepController extends Controller
     public function kategori()
     {
         return KategoriResource::make(Kategori::all());
+    }
+    
+    public function toko(Request $request)
+    {
+        $toko = Toko::latest();
+
+        return TokoResource::collection(
+            $toko->filter(
+                request(['search']))
+            ->with(['user'])
+            ->where('user_id', $request->user()->id)
+            ->get());
+    }
+
+    public function storetoko(StoreTokoRequest $request)
+    {
+        $user = $request->user();
+        $request->validate([
+            'nama_toko' => 'required',
+            'alamat' => 'required',
+            'latitude' => 'required',
+            'longitude' =>'required',
+            'no_telp' =>'required'
+        ]);
+        $toko = Toko::create(
+            [
+                'nama_toko' => $request->nama_toko,
+                'alamat' => $request->alamat,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'no_telp' => $request->no_telp,
+                'user_id' => $user->id
+            ]
+        );
+        return TokoResource::make($toko)->additional([
+                'message' => 'success'
+            ]);
     }
 
     /**
