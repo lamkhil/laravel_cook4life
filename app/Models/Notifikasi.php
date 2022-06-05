@@ -36,7 +36,8 @@ class Notifikasi extends Model
 
         // Set POST variables
         $url = 'https://fcm.googleapis.com/fcm/send';
-  
+
+        dd(env('FCM_LEGACY_KEY'));
         $headers = array(
            'Authorization: key=' . env('FCM_LEGACY_KEY'),
            'Content-Type: application/json'
