@@ -165,7 +165,7 @@ class ResepController extends Controller
 
     public function show($id)
     {
-        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating', 'allrating'])
             ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
             ->where('id', '=', $id)
             ->get()[0];
