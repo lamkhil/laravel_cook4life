@@ -29,7 +29,7 @@ class Notifikasi extends Model
             'notification'=>$data,
             "priority" => "high",
         );
-        Notifikasi::sendPushNotification($fields);
+        return Notifikasi::sendPushNotification($fields);
     }
 
     private static function sendPushNotification( $fields ) {

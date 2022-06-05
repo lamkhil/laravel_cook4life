@@ -32,7 +32,7 @@ class ResepController extends Controller
                 $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
                     ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
                     ->paginate(5)
-            )->sortBy('like');
+            )->sortByDesc('like');
         }
         return ResepResource::collection(
             $resep->filter(
@@ -130,16 +130,17 @@ class ResepController extends Controller
         }
         $resep = Resep::findOrFail($request->resep_id);
 
-        Notifikasi::sendFcm(
+        $notifikasi = Notifikasi::sendFcm(
             $resep,
             $user->name . " menyukai resep anda",
             User::find($resep->user_id)
         );
-
-        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+        $resep = Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
             ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
             ->where('id', '=', $request->resep_id)
             ->get()[0];
+            $resep['notifikasi']= $notifikasi;
+        return $resep;
     }
 
     public function favorite(Request $request)
