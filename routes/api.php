@@ -25,9 +25,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/toko', [TokoController::class, 'index']);
     Route::post('/toko', [TokoController::class, 'store']);
     
-    Route::get('/komentar/{id}', [Komentar::class, 'index']);
-    Route::post('/komentar', [Komentar::class, 'store']);
-    Route::delete('/komentar/{id}', [Komentar::class, 'destroy']);
+    Route::post('/komentar', [ResepController::class, 'komentar']);
+    Route::delete('/komentar/{id}', [ResepController::class, 'komentar']);
 
     Route::get('/kategori', [KategoriController::class, 'index']);
 

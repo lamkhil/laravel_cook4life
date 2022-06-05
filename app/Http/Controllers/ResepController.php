@@ -10,6 +10,7 @@ use App\Models\Bahan;
 use App\Models\Langkah;
 use Illuminate\Http\Request;
 use App\Models\Favorit;
+use App\Models\Komentar;
 use App\Models\Rating;
 use App\Models\Like;
 use App\Models\Notifikasi;
@@ -190,6 +191,29 @@ class ResepController extends Controller
         }
 
         
+
+        return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
+            ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
+            ->where('id', '=', $request->resep_id)
+            ->get()[0];
+    }
+
+    public function komentar(Request $request)
+    {
+        $user = $request->user();
+        
+        $user = $request->user();
+        Komentar::create([
+           'resep_id'=> $request->resep_id,
+           'user_id'=>$user->id,
+           'komentar'=>$request->komentar
+        ]);
+
+        Notifikasi::sendFcm(
+            Resep::find($request->resep_id),
+            $user->name.' mengomentari rating resep anda "'.$request->komentar.'"',
+            User::find(Resep::find($request->resep_id)->user_id)
+        );
 
         return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
             ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
