@@ -109,10 +109,11 @@ class ResepController extends Controller
     public function show($id)
     {
         $resep = Resep::findOrFail($id);
-        return ResepResource::make(
+        $resepResource = ResepResource::make(
             $resep->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
                 ->withCount(['like', 'favorit', 'like_me','favorit_me'])
             ->get());
+            dd($resep);
     }
 
     public function like(Request $request)
