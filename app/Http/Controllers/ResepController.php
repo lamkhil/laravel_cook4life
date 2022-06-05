@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Resep;
 use App\Http\Requests\StoreResepRequest;
 use App\Http\Requests\UpdateResepRequest;
+use App\Http\Resources\NotifikasiResource;
 use App\Http\Resources\ResepResource;
 use App\Models\Bahan;
 use App\Models\Langkah;
@@ -42,6 +43,16 @@ class ResepController extends Controller
                 ->with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating', 'allrating'])
                 ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
                 ->get()
+        );
+    }
+
+    public function notifikasi()
+    {
+
+        $notifikasi = Notifikasi::latest();
+
+        return NotifikasiResource::collection(
+            $notifikasi->with('resep')->get()
         );
     }
 

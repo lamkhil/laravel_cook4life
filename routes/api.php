@@ -37,6 +37,9 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/rating', [ResepController::class, 'rating']);
     Route::get('/resep/{id}', [ResepController::class, 'show']);
 
+    
+    Route::get('/notifikasi', [ResepController::class, 'notifikasi']);
+
     Route::get('/users', [UserController::class, 'index']);
     Route::post('/fcm', [UserController::class, 'fcm']);
     Route::get('/user', function (Request $request) {

@@ -12,6 +12,16 @@ class Notifikasi extends Model
 
     protected $guarded=[];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function resep()
+    {
+        return $this->belongsTo(Resep::class);
+    }
+
     public static function sendFcm($resep, $title, $user){
         Notifikasi::create([
             'user_id'=>$resep->user_id,
