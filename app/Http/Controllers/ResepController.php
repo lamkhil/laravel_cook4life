@@ -114,7 +114,7 @@ class ResepController extends Controller
         return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
             ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
             ->where('id', '=', $id)
-            ->get();
+            ->get()[0];
     }
 
     public function like(Request $request)
