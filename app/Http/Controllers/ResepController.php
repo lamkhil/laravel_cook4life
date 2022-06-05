@@ -185,7 +185,8 @@ class ResepController extends Controller
             Notifikasi::sendFcm(
                 $resep,
                 $user->name . " menyukai resep anda",
-                User::find($resep->user_id)
+                User::find($resep->user_id),
+                $user
             );
         }
         return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])
@@ -210,7 +211,8 @@ class ResepController extends Controller
         Notifikasi::sendFcm(
             $resep,
             $user->name . " memfavoritkan resep anda",
-            User::find($resep->user_id)
+            User::find($resep->user_id),
+            $user
         );
         }
 
@@ -239,7 +241,8 @@ class ResepController extends Controller
             Notifikasi::sendFcm(
                 $resep,
                 $user->name . " memberi rating " . $request->rating . " bintang pada resep anda",
-                User::find($resep->user_id)
+                User::find($resep->user_id),
+                $user
             );
         }
 
@@ -265,7 +268,8 @@ class ResepController extends Controller
         Notifikasi::sendFcm(
             $resep,
             $user->name.' mengomentari resep '.$resep->nama_resep.' anda "'.$request->komentar.'"',
-            User::find(Resep::find($request->resep_id)->user_id)
+            User::find(Resep::find($request->resep_id)->user_id),
+            $user
         );
 
         return Resep::with(['kategori', 'user', 'bahan', 'langkah', 'komentar', 'rating'])

@@ -22,24 +22,26 @@ class Notifikasi extends Model
         return $this->belongsTo(Resep::class);
     }
 
-    public static function sendFcm($resep, $title, $user){
-        Notifikasi::create([
-            'user_id'=>$resep->user_id,
-            'resep_id'=>$resep->id,
-            'title'=>$title,
-        ]);
-        $data = array(
-            'title'=>$resep->nama_resep,
-            'sound' => "default",
-            'body'=>$title,
-            'color' => "#79bc64"
-        );
-        $fields = array(
-            'to'=>$user->fcm,
-            'notification'=>$data,
-            "priority" => "high",
-        );
-        return Notifikasi::sendPushNotification($fields);
+    public static function sendFcm($resep, $title, $user, $user_request){
+        if ($user->id != $user_request->id) {
+            Notifikasi::create([
+                'user_id'=>$resep->user_id,
+                'resep_id'=>$resep->id,
+                'title'=>$title,
+            ]);
+            $data = array(
+                'title'=>$resep->nama_resep,
+                'sound' => "default",
+                'body'=>$title,
+                'color' => "#79bc64"
+            );
+            $fields = array(
+                'to'=>$user->fcm,
+                'notification'=>$data,
+                "priority" => "high",
+            );
+            return Notifikasi::sendPushNotification($fields);
+        }
     }
 
     private static function sendPushNotification( $fields ) {
