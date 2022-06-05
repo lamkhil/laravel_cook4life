@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\ResepController;
-use App\Http\Controllers\TokoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -22,13 +20,13 @@ use App\Models\Komentar;
 //API with authorization bearer token
 Route::middleware('auth:sanctum')->group(function(){
 
-    Route::get('/toko', [TokoController::class, 'index']);
-    Route::post('/toko', [TokoController::class, 'store']);
+    Route::get('/toko', [ResepController::class, 'toko']);
+    Route::post('/toko', [ResepController::class, 'storetoko']);
     
     Route::post('/komentar', [ResepController::class, 'komentar']);
     Route::delete('/komentar/{id}', [ResepController::class, 'komentar']);
 
-    Route::get('/kategori', [KategoriController::class, 'index']);
+    Route::get('/kategori', [ResepController::class, 'kategori']);
 
     Route::get('/resep', [ResepController::class, 'index']);
     Route::post('/like', [ResepController::class, 'like']);
