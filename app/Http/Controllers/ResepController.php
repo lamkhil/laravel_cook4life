@@ -52,7 +52,7 @@ class ResepController extends Controller
         $notifikasi = Notifikasi::latest();
 
         return NotifikasiResource::collection(
-            $notifikasi->with('resep')->get()
+            $notifikasi->with('resep')->where('user_id', request()->user()->id)->get()
         );
     }
 
