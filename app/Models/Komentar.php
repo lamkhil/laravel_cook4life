@@ -12,7 +12,7 @@ class Komentar extends Model
 
     protected $guarded=[];
 
-    public function toko(){
+    public function user(){
         return $this->belongsTo(User::class);
     }
 }
