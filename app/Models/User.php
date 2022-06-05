@@ -39,6 +39,10 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
-    protected $casts = [
-    ];
+    protected $casts = [];
+
+    public function user_id()
+    {
+        return $this->id;
+    }
 }

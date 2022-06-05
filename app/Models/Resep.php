@@ -38,13 +38,12 @@ class Resep extends Model
     }
 
     public function like_me(){
-        $user = Auth::user();
-        return $this->hasMany(Like::class)->whereUserId($user->id);
+        return $this->hasMany(Like::class)->whereUserId(Auth::id());
     }
 
     public function favorit_me(){
         $user = Auth::user();
-        return $this->hasMany(Favorit::class)->whereUserId($user->id);
+        return $this->hasMany(Favorit::class)->whereUserId(Auth::id());
     }
 
     public function rating(){
