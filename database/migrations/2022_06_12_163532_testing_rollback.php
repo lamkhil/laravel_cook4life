@@ -15,7 +15,7 @@ class TestingRollback extends Migration
     {
         Schema::create('testing', function (Blueprint $table) {
             $table->id();
-            $table->int('jarak');
+            $table->integer('jarak');
             $table->timestamps();
         });
     }
