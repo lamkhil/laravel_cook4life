@@ -14,6 +14,7 @@ use App\Models\Bahan;
 use App\Models\Langkah;
 use Illuminate\Http\Request;
 use App\Models\Favorit;
+use App\Models\Jarak;
 use App\Models\Kategori;
 use App\Models\Komentar;
 use App\Models\Rating;
@@ -169,6 +170,12 @@ class ResepController extends Controller
             ->withCount(['like', 'favorit', 'like_me', 'favorit_me'])
             ->where('id', '=', $id)
             ->get()[0];
+    }
+
+    public function testing(Request $request){
+        Jarak::where('id',1)->update([
+            'jarak' => $request->jarak
+        ]);
     }
 
     public function like(Request $request)
