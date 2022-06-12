@@ -36,9 +36,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/resep/{id}', [ResepController::class, 'show']);
 
     
-    Route::get('/testing', [ResepController::class, 'testing']);
-
-    
     Route::get('/notifikasi', [ResepController::class, 'notifikasi']);
 
     Route::get('/users', [UserController::class, 'index']);
@@ -50,5 +47,7 @@ Route::middleware('auth:sanctum')->group(function(){
 
 //API without bearer token
 //API Authentication
+
+Route::get('/testing', [ResepController::class, 'testing']);
 Route::post('/google_sign_in', [UserController::class, 'login']);
 
