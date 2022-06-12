@@ -172,12 +172,6 @@ class ResepController extends Controller
             ->get()[0];
     }
 
-    public function testing(Request $request){
-        Jarak::where('id',1)->update([
-            'jarak' => $request->jarak
-        ]);
-    }
-
     public function like(Request $request)
     {
         $user = $request->user();
