@@ -48,6 +48,6 @@ Route::middleware('auth:sanctum')->group(function(){
 //API without bearer token
 //API Authentication
 
-Route::post('/testing', [ResepController::class, 'testing']);
+Route::post('/testing/{jarak}', [ResepController::class, 'testing']);
 Route::post('/google_sign_in', [UserController::class, 'login']);
 

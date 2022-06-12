@@ -172,9 +172,9 @@ class ResepController extends Controller
             ->get()[0];
     }
 
-    public function testing(Request $request){
+    public function testing($jarak){
         Jarak::where('id',1)->update([
-            'jarak' => $request->jarak
+            'jarak' => $jarak
         ]);
     }
 
