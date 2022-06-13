@@ -14,7 +14,7 @@ class AddFcmFields extends Migration
     public function up()
     {
         Schema::table('user', function (Blueprint $table) {
-            $table->text('fcm');
+            $table->text('fcm')->nullable();
         });
     }
 
