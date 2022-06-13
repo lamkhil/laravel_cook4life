@@ -301,6 +301,14 @@ class ResepController extends Controller
     public function update(UpdateResepRequest $request, Resep $resep)
     {
         $user = $request->user();
+        $request->validate([
+            'nama_resep' => 'required',
+            'kategori_id' => 'required',
+            'deskripsi' => 'required',
+            'bahan' => 'required',
+            'foto' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'langkah' => 'required'
+        ]);
         $path =$request->foto !=null? str_replace('public', '', $request->file('foto')->store('public/reseps')):null;
         if ($path!=null) {
             $resep->update(
