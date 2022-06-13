@@ -26,8 +26,5 @@ class AddNotificationRelation extends Migration
      */
     public function down()
     {
-        Schema::table('notifikasi', function (Blueprint $table) {
-            $table->dropForeign(['notif_to_user_foreign_k','notif_to_resep_foreign_k']);
-        });
     }
 }
