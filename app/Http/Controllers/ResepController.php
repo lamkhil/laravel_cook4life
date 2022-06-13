@@ -163,6 +163,7 @@ class ResepController extends Controller
             'message' => 'success'
         ]);
     }
+    
 
     public function show($id)
     {
@@ -299,7 +300,63 @@ class ResepController extends Controller
      */
     public function update(UpdateResepRequest $request, Resep $resep)
     {
-        //
+        $user = $request->user();
+        $request->validate([
+            'nama_resep' => 'required',
+            'kategori_id' => 'required',
+            'deskripsi' => 'required',
+            'bahan' => 'required',
+            'foto' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'langkah' => 'required'
+        ]);
+        $path =$request->foto !=null? str_replace('public', '', $request->file('foto')->store('public/reseps')):null;
+        if ($path!=null) {
+            $resep->update(
+                [
+                    'nama_resep' => $request->nama_resep,
+                    'kategori_id' => $request->kategori_id,
+                    'deskripsi' => $request->deskripsi,
+                    'foto' => $path,
+                    'user_id' => $user->id
+                ]
+            );
+        } else {
+            $resep->update(
+                [
+                    'nama_resep' => $request->nama_resep,
+                    'kategori_id' => $request->kategori_id,
+                    'deskripsi' => $request->deskripsi,
+                    'user_id' => $user->id
+                ]
+            );
+        }
+        
+        $arrayBahan = $request->bahan;
+        $arrayLangkah = $request->langkah;
+        foreach ($arrayBahan as $bahan) {
+            Bahan::where('resep_id', $resep->id)->update(
+                [
+                    'resep_id' => $resep->id,
+                    'toko_id' => $bahan['toko_id'],
+                    'nama_bahan' => $bahan['nama_bahan'],
+                    'harga' => $bahan['harga']
+                ]
+            );
+        }
+
+        foreach ($arrayLangkah as $langkah) {
+            Langkah::where('resep_id', $resep->id)->update(
+                [
+                    'resep_id' => $resep->id,
+                    'deskripsi' => $langkah['deskripsi'],
+                    'waktu' => $langkah['waktu'],
+                ]
+            );
+        }
+
+        return ResepResource::make($resep)->additional([
+            'message' => 'success'
+        ]);
     }
 
     /**
@@ -310,6 +367,9 @@ class ResepController extends Controller
      */
     public function destroy(Resep $resep)
     {
-        //
+        Bahan::where('resep_id', $resep->id)->delete();
+        Langkah::where('resep_id', $resep->id)->delete();
+        $resep->delete();
+        return "success";
     }
 }
