@@ -370,6 +370,9 @@ class ResepController extends Controller
         try {
             Bahan::where('resep_id', $resep->id)->delete();
             Langkah::where('resep_id', $resep->id)->delete();
+            Like::where('resep_id', $resep->id)->delete();
+            Komentar::where('resep_id', $resep->id)->delete();
+            Favorit::where('resep_id', $resep->id)->delete();
             $resep->delete();
             return "success";
         } catch (\Throwable $th) {
