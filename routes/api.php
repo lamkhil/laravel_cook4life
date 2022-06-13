@@ -31,8 +31,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/resep', [ResepController::class, 'index']);
     Route::get('/resep/{id}', [ResepController::class, 'show']);
     Route::post('/resep', [ResepController::class, 'store']);
-    Route::patch('/resep/{id}', [ResepController::class, 'update']);
-    Route::delete('/resep/{id}', [ResepController::class, 'destroy']);
+    Route::patch('/resep/{resep}', [ResepController::class, 'update']);
+    Route::delete('/resep/{resep}', [ResepController::class, 'destroy']);
 
     Route::post('/like', [ResepController::class, 'like']);
     Route::post('/favorite', [ResepController::class, 'favorite']);
