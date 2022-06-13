@@ -367,9 +367,13 @@ class ResepController extends Controller
      */
     public function destroy(Resep $resep)
     {
-        Bahan::where('resep_id', $resep->id)->delete();
-        Langkah::where('resep_id', $resep->id)->delete();
-        $resep->delete();
-        return "success";
+        try {
+            Bahan::where('resep_id', $resep->id)->delete();
+            Langkah::where('resep_id', $resep->id)->delete();
+            $resep->delete();
+            return "success";
+        } catch (\Throwable $th) {
+            return "failed";
+        }
     }
 }
