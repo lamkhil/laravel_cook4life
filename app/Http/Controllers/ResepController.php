@@ -331,10 +331,12 @@ class ResepController extends Controller
             );
         }
         
+        Bahan::where('resep_id', $resep->id)->delete();
+        Langkah::where('resep_id', $resep->id)->delete();
         $arrayBahan = $request->bahan;
         $arrayLangkah = $request->langkah;
         foreach ($arrayBahan as $bahan) {
-            Bahan::where('resep_id', $resep->id)->update(
+            Bahan::create(
                 [
                     'resep_id' => $resep->id,
                     'toko_id' => $bahan['toko_id'],
@@ -345,7 +347,7 @@ class ResepController extends Controller
         }
 
         foreach ($arrayLangkah as $langkah) {
-            Langkah::where('resep_id', $resep->id)->update(
+            Langkah::create(
                 [
                     'resep_id' => $resep->id,
                     'deskripsi' => $langkah['deskripsi'],
