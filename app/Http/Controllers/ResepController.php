@@ -373,8 +373,8 @@ class ResepController extends Controller
             Like::where('resep_id', $resep->id)->delete();
             Komentar::where('resep_id', $resep->id)->delete();
             Favorit::where('resep_id', $resep->id)->delete();
-            $resep->delete();
-            return "success";
+            Resep::where('id', $resep->id)->delete();
+            return $resep->id;
         } catch (\Throwable $th) {
             return "failed";
         }
