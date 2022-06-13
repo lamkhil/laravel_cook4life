@@ -14,8 +14,8 @@ class AddNotificationRelation extends Migration
     public function up()
     {
         Schema::table('notifikasi', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('user')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('resep_id')->references('id')->on('resep')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('user_id','notif_to_user_fk')->references('id')->on('user')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('resep_id', 'resep_to_user_fk')->references('id')->on('resep')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
