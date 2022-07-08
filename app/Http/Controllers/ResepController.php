@@ -122,7 +122,7 @@ class ResepController extends Controller
             'nama_resep' => 'required',
             'kategori_id' => 'required',
             'deskripsi' => 'required',
-            'foto' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'foto' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:20480',
             'bahan' => 'required',
             'langkah' => 'required'
         ]);
