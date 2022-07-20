@@ -37,7 +37,7 @@
 
 <body>
     <div class=container4>
-        Tidak ditemukan resep yang tersedia
+        <p>Tidak ditemukan resep yang tersedia</p>
     </div>
 </body>
 

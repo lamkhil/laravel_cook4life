@@ -40,9 +40,11 @@
 
 <body>
     <div class=container4>
+        <p>
         <form action="https://play.google.com/store/apps/details?id=com.snepy.cook4life">
             <input type="submit" value="Download Cook4life" />
         </form>
+        </p>
     </div>
 </body>
 
