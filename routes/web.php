@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Resep;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/share/{id}', function ($id) {
+    $data = array();
+    $data['resep'] = Resep::find($id);
+    if ($data['resep'] == null) {
+        return view('error');
+    } else {
+        return view('share', $data);
+    }
 });
