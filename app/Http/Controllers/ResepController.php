@@ -318,6 +318,7 @@ class ResepController extends Controller
                     'kategori_id' => $request->kategori_id,
                     'deskripsi' => $request->deskripsi,
                     'foto' => $path,
+                    'social' => $request->social,
                     'user_id' => $user->id
                 ]
             );
@@ -327,7 +328,8 @@ class ResepController extends Controller
                     'nama_resep' => $request->nama_resep,
                     'kategori_id' => $request->kategori_id,
                     'deskripsi' => $request->deskripsi,
-                    'user_id' => $user->id
+                    'user_id' => $user->id,
+                    'social' => $request->social
                 ]
             );
         }
