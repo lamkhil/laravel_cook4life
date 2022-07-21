@@ -133,6 +133,7 @@ class ResepController extends Controller
                 'kategori_id' => $request->kategori_id,
                 'deskripsi' => $request->deskripsi,
                 'foto' => $path,
+                'social' => $request->social,
                 'user_id' => $user->id
             ]
         );
